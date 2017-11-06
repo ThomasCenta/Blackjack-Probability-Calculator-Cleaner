@@ -71,6 +71,7 @@ public class Deck{
 	 */
 	public double drawProbability(int rank) {
 		assert rank >= 1 && rank <= 13;
+		if(this.numCards == 0) {return 0.0;}
 		return this.cardsInDeck[rank] * 1.0 / this.numCards;
 	}
 
