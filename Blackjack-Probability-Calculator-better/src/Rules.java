@@ -170,10 +170,15 @@ public class Rules {
     return splittable;
   }
   
-  public boolean allowedToHit(MinimalHand hand) {
+  public boolean playerAllowedToHit(MinimalHand hand) {
 	  if(hand.getRankSplitOn() == 0 && hand.totalNumCards() >= 2 && this.noHitSplitAce) {
 		  return false;
 	  }
+	  return true;
+  }
+  
+  public boolean playerAllowedToContinue(MinimalHand hand) {
+	  if(hand.getHandValue() > 21) { return false;}
 	  return true;
   }
 
@@ -195,4 +200,27 @@ public class Rules {
     return this.numTimesAllowedSplittingAces;
   }
 
+  
+  /*
+   * @requires this.dealerStays(dealerHand)
+   * 	usually this will only be called if its known the dealer is done
+   * returns an array of 6 zeroes, and one 1.0 in the space this hand has
+   * spaces for hand values: {17, 18, 19, 20, non-blackjack 21, blackjack, bust}
+   */
+  public double[] dealerResult(MinimalHand dealerHand) {
+	  assert this.dealerStays(dealerHand);
+	  
+	  int dealerHandValue = dealerHand.getHandValue();
+	  double[] toReturn = new double[7];
+	  if(dealerHandValue < 21) {
+		  toReturn[dealerHandValue - 17] = 1.0;
+	  }else if(dealerHandValue > 21) {
+		  toReturn[6] = 1.0;
+	  }else if(this.hasBlackjack(dealerHand)) {
+		  toReturn[5] = 1.0;
+	  }else {
+		  toReturn[4] = 1.0;
+	  }
+	  return toReturn;
+  }
 }

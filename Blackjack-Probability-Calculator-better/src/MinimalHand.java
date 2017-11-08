@@ -237,5 +237,16 @@ public class MinimalHand {
     assert newHand != null : "pair not found in splitting hand.";
     return newHand;
   }
+  
+  /*
+   * Returns true if this' cards are a subset of the set of cards in otherHand
+   * assumes all 10s, jacks, queens, kings are equivalent
+   */
+  public boolean isSubset10(MinimalHand otherHand) {
+	  for(int i = 1; i <= 10; i += 1) {
+		  if(this.cardsInHand10[i] > otherHand.numCardRank10(i)) {return false;}
+	  }
+	  return true;
+  }
 
 }

@@ -1,3 +1,8 @@
+
+
+/*
+ * This class is meant to be a node for the HandTree class and its subclasses
+ */
 public class HandNode extends MinimalHand {
 
   /**
@@ -67,11 +72,11 @@ public class HandNode extends MinimalHand {
    *          (not the money stuff)
    */
   public HandNode(HandNode otherHand, boolean cardsOnly) {
-    this.cardsInHand13 = new int[13];
-    this.cardsInHand10 = new int[10];
-    for (int i = 0; i < 13; i++) {
+    this.cardsInHand13 = new int[14];
+    this.cardsInHand10 = new int[11];
+    for (int i = 1; i <= 13; i++) {
       this.cardsInHand13[i] = otherHand.numCardRank13(i);
-      if (i <= 9) {
+      if (i <= 10) {
         this.cardsInHand10[i] = otherHand.numCardRank10(i);
       }
     }
@@ -92,7 +97,6 @@ public class HandNode extends MinimalHand {
       this.mostMoneyMade = -3;
       this.bestMove = null;
     }
-
     this.nextHands = new HandNode[13];
     this.numCards = otherHand.totalNumCards();
     this.rankSplitOn = otherHand.getRankSplitOn();
