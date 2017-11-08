@@ -2,7 +2,7 @@
  * This is going to be a hand with the minimal amount of data stored for the
  * simulations.
  *
- * @author Thomas
+ * @author Thomas Centa
  *
  */
 public class MinimalHand {

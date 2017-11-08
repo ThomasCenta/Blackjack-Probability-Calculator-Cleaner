@@ -105,7 +105,7 @@ public class DeckUnitTest {
 			assertEquals(0.0, deck.drawProbability(i), 0.00001);
 		}
 	}
-	
+
 	@Test
 	public void testDrawProbabilityNoCardRankInDeck() {
 		Deck deck = new Deck(1);
@@ -121,7 +121,7 @@ public class DeckUnitTest {
 			for(int i = 0; i < 4; i += 1) {deck.addCard(removed);}
 		}
 	}
-	
+
 	// addCard tests
 	@Test
 	public void testAddCardBasic() {
@@ -137,7 +137,7 @@ public class DeckUnitTest {
 			}
 		}
 	}
-	
+
 	// removeCard tests
 	@Test
 	public void testRemoveCardBasic() {
@@ -153,7 +153,7 @@ public class DeckUnitTest {
 			}
 		}
 	}
-	
+
 	// removeRandomCard tests
 	@Test
 	public void removeRandomCardTestEmptiesDeck() {
@@ -162,7 +162,7 @@ public class DeckUnitTest {
 			deck.removeRandomCard();
 		}
 	}
-	
+
 	@Test
 	public void removeRandomCardTestRemovesExistingCard() {
 		Deck deck = new Deck(0);
@@ -177,5 +177,35 @@ public class DeckUnitTest {
 			fail();
 		}
 	}
+
+	// numCard tests (not really necessary)
+	@Test
+	public void numCardTest() {
+		Deck deck = new Deck(10);
+		for(int i = 1; i <= 13; i += 1) {
+			assertEquals(40, deck.numCard(i));
+		}
+	}
+
+	//takeOutHand tests
+	@Test
+	public void takeOutHandTestEmptyHand() {
+		Deck deck = new Deck(1);
+		MinimalHand hand = new MinimalHand();
+
+		deck.takeOutHand(hand);
+		assertTrue(deck.equals(new Deck(1)));
+	}
+
+	//addHand tests
+	@Test
+	public void addHandTestEmptyHand() {
+		Deck deck = new Deck(1);
+		MinimalHand hand = new MinimalHand();
+
+		deck.addHand(hand);
+		assertTrue(deck.equals(new Deck(1)));
+	}
+
 
 }

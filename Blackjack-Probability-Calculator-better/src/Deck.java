@@ -157,4 +157,11 @@ public class Deck{
 		return toReturn;
 	}
 
+	public boolean equals(Deck otherDeck) {
+		if(this.numCards != otherDeck.numCardsInDeck()) { return false;}
+		for(int i = 1; i <=13 ; i += 1) {
+			if(this.cardsInDeck[i] != otherDeck.numCard(i)) { return false;}
+		}
+		return true;
+	}
 }
