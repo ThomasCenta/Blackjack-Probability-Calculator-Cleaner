@@ -1,8 +1,7 @@
 package DealerCalculator;
 import java.util.Random;
 
-import Deck;
-import MinimalHand;
+import PlayerCalculator.Deck;
 
 /*
  * This deck always disregards differences between 10, jack, queen, king.
@@ -127,30 +126,6 @@ public class DealerDeck {
 		return this.numCards;
 	}
 
-	/*
-	 * @requires hand != null
-	 */
-	public void takeOutHand(MinimalHand hand) {
-		assert hand != null;
-		for (int i = 1; i <= 13; i++) {
-			for (int j = 0; j < hand.numCardRank10(i); j++) {
-				this.removeCard(i); // let the kernel method take care of it.
-			}
-		}
-	}
-
-	/*
-	 * @requires hand != null
-	 */
-	public void addHand(MinimalHand hand) {
-		assert hand != null;
-		for (int i = 0; i < 13; i++) {
-			for (int j = 0; j < hand.numCardRank13(i); j++) {
-				this.addCard(i); // let the kernel method take care of it.
-			}
-		}
-	}
-
 	public String toString() {
 		String toReturn = ""+this.cardsInDeck[1];
 		for (int i = 2; i <= 13; i++) {
@@ -159,7 +134,7 @@ public class DealerDeck {
 		return toReturn;
 	}
 
-	public boolean equals(Deck otherDeck) {
+	public boolean equals(DealerDeck otherDeck) {
 		if(this.numCards != otherDeck.numCardsInDeck()) { return false;}
 		for(int i = 1; i <= 10; i += 1) {
 			if(this.cardsInDeck[i] != otherDeck.numCard(i)) { return false;}

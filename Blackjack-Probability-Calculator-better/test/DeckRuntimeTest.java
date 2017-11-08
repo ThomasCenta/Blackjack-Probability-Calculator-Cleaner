@@ -1,6 +1,8 @@
 import java.util.LinkedList;
 import java.util.Queue;
 
+import PlayerCalculator.Deck;
+
 public class DeckRuntimeTest {
 
 	private static final int NUM_ITERATIONS_PER_TEST = 10000000;

@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import PlayerCalculator.Deck;
 
 public class DeckUnitTest {
 
@@ -187,25 +188,6 @@ public class DeckUnitTest {
 		}
 	}
 
-	//takeOutHand tests
-	@Test
-	public void takeOutHandTestEmptyHand() {
-		Deck deck = new Deck(1);
-		MinimalHand hand = new MinimalHand();
-
-		deck.takeOutHand(hand);
-		assertTrue(deck.equals(new Deck(1)));
-	}
-
-	//addHand tests
-	@Test
-	public void addHandTestEmptyHand() {
-		Deck deck = new Deck(1);
-		MinimalHand hand = new MinimalHand();
-
-		deck.addHand(hand);
-		assertTrue(deck.equals(new Deck(1)));
-	}
 
 
 }

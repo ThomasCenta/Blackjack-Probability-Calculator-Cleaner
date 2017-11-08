@@ -1,4 +1,7 @@
+package PlayerCalculator;
 import java.util.Random;
+
+import MinimalHand;
 
 /**
  * The Implementation of the Deck class.
@@ -123,30 +126,6 @@ public class Deck{
 
 	public int numCardsInDeck() {
 		return this.numCards;
-	}
-
-	/*
-	 * @requires hand != null
-	 */
-	public void takeOutHand(MinimalHand hand) {
-		assert hand != null;
-		for (int i = 0; i < 13; i++) {
-			for (int j = 0; j < hand.numCardRank13(i); j++) {
-				this.removeCard(i); // let the kernel method take care of it.
-			}
-		}
-	}
-
-	/*
-	 * @requires hand != null
-	 */
-	public void addHand(MinimalHand hand) {
-		assert hand != null;
-		for (int i = 0; i < 13; i++) {
-			for (int j = 0; j < hand.numCardRank13(i); j++) {
-				this.addCard(i); // let the kernel method take care of it.
-			}
-		}
 	}
 
 	public String toString() {

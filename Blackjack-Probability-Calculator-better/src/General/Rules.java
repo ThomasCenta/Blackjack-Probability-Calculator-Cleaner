@@ -1,3 +1,6 @@
+package General;
+import MinimalHand;
+
 /**
  * This is to store all the rules that are implemented on a given table.
  *
