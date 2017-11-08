@@ -1,5 +1,10 @@
+package DealerCalculator;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import Deck;
+import MinimalHand;
+import Rules;
 
 /*
  * This will be a class creating a tree of hand nodes useful for doing probability calculations
@@ -21,14 +26,14 @@ public class DealerHandTree {
 		public Node() {
 			this.dealerResult = null;
 			this.hand = null;
-			this.next = null;
+			this.next = new Node[11];
 			this.probability = 0.0;
 			this.latestIteration = 0;
 		}
 		public Node(MinimalHand hand) {
 			this.hand = hand;
 			this.dealerResult = null;
-			this.next = null;
+			this.next = new Node[11];
 			this.latestIteration = 0;
 			this.probability = 0.0;
 		}
@@ -121,6 +126,47 @@ public class DealerHandTree {
 		initializeAllNodes(startingHand);
 	}
 
+	
+	/*
+	 * @requires dealerHand != null
+	 * @requires this.startingNode.hand.isSubset10(dealerHand);
+	 * returns null if dealerHand is not in this
+	 */
+	private Node getNode(MinimalHand dealerHand) {
+		assert dealerHand != null;
+		assert this.startingNode.hand.isSubset10(dealerHand);
+		
+		Node currentNode = this.startingNode;
+		for(int i = 1; i <= 10; i += 1) {
+			for(int j = this.startingNode.hand.numCardRank10(i); j < dealerHand.numCardRank10(i); j += 1) {
+				currentNode = currentNode.next[i];
+				if(currentNode == null) {return null;}
+			}
+		}
+		return currentNode;
+	}
+	/*
+	 * @requires deck != null
+	 * @requires node != null
+	 * updates next layers node probability values based on node.probability and deck
+	 */
+	private void updateProbabilitiesOfnextLayer(Deck deck, Node node) {
+		
+	}
+	
+	/*
+	 * @requires deck != null
+	 * @requires node != null
+	 * sets node.dealerResult values based on next layers dealerResults and deck
+	 */
+	private void setDealerResultsFromNextLayer(Deck deck, Node node) {
+		if(node.next[1] == null) { return; } //there is no next layer
+		for(int i = 1; i <= 10; i += 1) {
+			double drawProbability = deck.drawProbability(i)
+		}
+		
+	}
+	
 	/*
 	 * @requires deck != null
 	 * @requires dealerHand != null
@@ -128,14 +174,14 @@ public class DealerHandTree {
 	 */
 	public double[] dealerProbabilities(Deck deck, MinimalHand dealerHand) {
 		assert deck != null;
-		assert dealerHand != null;
-		assert this.startingNode.hand.isSubset10(dealerHand);
+		
 		
 		if(!this.rules.dealerStays(dealerHand)) {
 			return this.rules.dealerResult(dealerHand);
 		}
+		Node startNode = this.getNode(dealerHand);
+		assert startNode != null;
 		
-		return null; //fix this 
 		
 	}
 	
