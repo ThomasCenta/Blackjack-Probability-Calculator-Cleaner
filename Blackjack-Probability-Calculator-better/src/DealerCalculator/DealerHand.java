@@ -13,7 +13,7 @@ public class DealerHand {
 	 * says whether or not this hand has an ace VALUED AT 11.
 	 */
 	protected boolean hasAce;
-	
+
 	/**
 	 * An array of size 11 with each index i corresponding to the number of cards
 	 * in this hand with rank i. Aces are 1, faces are 10
@@ -25,33 +25,35 @@ public class DealerHand {
 	 * total number of cards in this.
 	 */
 	protected int numCards;
-	
+
 	/**
-	   * Default constructor. Makes an empty hand.
-	   */
-	  public DealerHand() {
-	    this.cardsInHand = new int[11];
-	    this.handValue = 0;
-	    this.hasAce = false;
-	    this.numCards = 0;
-	  }
-	
+	 * Default constructor. Makes an empty hand.
+	 */
+	public DealerHand() {
+		this.cardsInHand = new int[11];
+		this.handValue = 0;
+		this.hasAce = false;
+		this.numCards = 0;
+	}
+
 	/**
-	   * Copy Constructor.
-	   *
-	   * @param otherHand
-	   *          hand to copy from.
-	   */
-	  public DealerHand(DealerHand otherHand) {
-	    this.cardsInHand = new int[10];
-	    for (int i = 0; i < 10; i++) {
-	      this.cardsInHand[i] = otherHand.numCardRank(i);
-	    }
-	    this.handValue = otherHand.getHandValue();
-	    this.hasAce = otherHand.getHasAce();
-	    this.numCards = otherHand.totalNumCards();
-	  }
-	
+	 * Copy Constructor.
+	 *
+	 * @param otherHand
+	 *          hand to copy from.
+	 */
+	public DealerHand(DealerHand otherHand) {
+		assert otherHand != null;
+
+		this.cardsInHand = new int[11];
+		for (int i = 1; i <= 10; i++) {
+			this.cardsInHand[i] = otherHand.numCardRank(i);
+		}
+		this.handValue = otherHand.getHandValue();
+		this.hasAce = otherHand.getHasAce();
+		this.numCards = otherHand.totalNumCards();
+	}
+
 	/*
 	 * @requires 1 <= rank <= 10
 	 */

@@ -40,6 +40,13 @@ public class DealerProbabilityCalculator {
 			this.lastProbabilityUpdateIteration = 0;
 			this.probability = 0.0;
 		}
+
+		@Override
+		public String toString() {
+			StringBuilder str = new StringBuilder();
+			str.append("hand: "+hand.toString());
+			return str.toString();
+		}
 	}
 
 
@@ -170,7 +177,7 @@ public class DealerProbabilityCalculator {
 		}
 		return sum;
 	}
-	
+
 	/*
 	 * sets a new iteration, then bubbles out probabilities
 	 * sets node to 1.0, then each subsequent to the probability of it occurring.
@@ -193,6 +200,11 @@ public class DealerProbabilityCalculator {
 			next.lastVisitedIteration = this.currentIteration;
 			if(next.next[1] != null) {
 				updateProbabilitiesOfNextLayer(next, deckWithNodeHand);
+				for(int i = 1; i <= 10; i += 1) {
+					if(deck.drawProbability(i, next.hand) > 0) {
+						toProcess.add(next.next[i]);
+					}
+				}
 			}else {
 				leavesVisited.add(next);
 			}
@@ -210,14 +222,15 @@ public class DealerProbabilityCalculator {
 	public double[] dealerProbabilities(DealerDeck deck, DealerHand dealerHand) {
 		assert deck != null;
 
-		if(!this.rules.dealerStays(dealerHand)) {
+		if(this.rules.dealerStays(dealerHand)) {
 			return this.rules.dealerResult(dealerHand);
 		}
 		Node startNode = this.getNode(dealerHand);
 		assert startNode != null;
+		startNode.probability = 1.0;
 
 		Queue<Node> reachableLeaves = bubbleOutProbabilities(deck, startNode);
-		
+
 		double[] dealerResults = new double[7];
 		while(!reachableLeaves.isEmpty()) {
 			Node next = reachableLeaves.poll();

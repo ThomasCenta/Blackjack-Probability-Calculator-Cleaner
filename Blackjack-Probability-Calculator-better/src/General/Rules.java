@@ -67,7 +67,7 @@ public class Rules {
   /*
    * null == doubleHardValuesAllowed => all values allowed
    */
-  Rules(boolean hitOnSoft17, int numTimesAllowedSplitting, int numTimesAllowedSplittingAces,
+  public Rules(boolean hitOnSoft17, int numTimesAllowedSplitting, int numTimesAllowedSplittingAces,
       boolean blackjackAfterSplittingAces, double blackjackPayout, boolean noHitSplitAces,
       int[] doubleHardValuesAllowed) {
 
