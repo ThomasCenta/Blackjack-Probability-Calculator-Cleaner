@@ -1,8 +1,6 @@
 package DealerCalculator;
 import java.util.Random;
 
-import PlayerCalculator.Deck;
-
 /*
  * This deck always disregards differences between 10, jack, queen, king.
  */
@@ -75,6 +73,30 @@ public class DealerDeck {
 		if(this.numCards == 0) {return 0.0;}
 		return this.cardsInDeck[rank] * 1.0 / this.numCards;
 	}
+	
+	public boolean contains(DealerHand hand) {
+		for(int i = 1; i <= 10; i += 1) {
+			if(this.cardsInDeck[i] < hand.numCardRank(i)) {return false;}
+		}
+		return true;
+	}
+	
+	/*
+	 * returns draw probability of rank AFTER hand is taken out of the deck
+	 * This is just to save computation time
+	 * 
+	 * @requires 1 <= rank <= 10
+	 * @requires hand != null
+	 * @requires this has the cards in hand
+	 */
+	public double drawProbability(int rank, DealerHand hand) {
+		assert rank >= 1 && rank <= 10;
+		assert hand != null;
+		assert this.contains(hand);
+		
+		if(this.numCards == hand.totalNumCards()) {return 0.0;}
+		return (this.cardsInDeck[rank]-hand.numCardRank(rank))*1.0 / (this.numCards - hand.totalNumCards());
+	}
 
 	public void addCard(int rank) {
 		this.cardsInDeck[rank]++;
@@ -142,6 +164,29 @@ public class DealerDeck {
 		return true;
 	}
 	
+	/*
+	 * @requires hand != null
+	 * @requires this has the cards in hand
+	 */
+	public void takeOutHand(DealerHand hand) {
+		assert hand != null;
+		for(int i = 1; i <= 10; i += 1) {
+			assert this.cardsInDeck[i] >= hand.numCardRank(i);
+			this.cardsInDeck[i] -= hand.numCardRank(i);
+		}
+		this.numCards -= hand.totalNumCards();
+	}
+	
+	/*
+	 * @requires hand != null
+	 */
+	public void addHand(DealerHand hand) {
+		assert hand != null;
+		for(int i = 1; i <= 10; i += 1) {
+			this.cardsInDeck[i] += hand.numCardRank(i);
+		}
+		this.numCards += hand.totalNumCards();
+	}
 	
 	
 }

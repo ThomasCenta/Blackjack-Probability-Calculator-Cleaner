@@ -25,11 +25,37 @@ public class DealerHand {
 	 * total number of cards in this.
 	 */
 	protected int numCards;
+	
+	/**
+	   * Default constructor. Makes an empty hand.
+	   */
+	  public DealerHand() {
+	    this.cardsInHand = new int[11];
+	    this.handValue = 0;
+	    this.hasAce = false;
+	    this.numCards = 0;
+	  }
+	
+	/**
+	   * Copy Constructor.
+	   *
+	   * @param otherHand
+	   *          hand to copy from.
+	   */
+	  public DealerHand(DealerHand otherHand) {
+	    this.cardsInHand = new int[10];
+	    for (int i = 0; i < 10; i++) {
+	      this.cardsInHand[i] = otherHand.numCardRank(i);
+	    }
+	    this.handValue = otherHand.getHandValue();
+	    this.hasAce = otherHand.getHasAce();
+	    this.numCards = otherHand.totalNumCards();
+	  }
+	
 	/*
-	 * rank == 10 => return sum(#10s, #jacks, #queens, #kings)
-	 * @requires 1 <= rank <= 13
+	 * @requires 1 <= rank <= 10
 	 */
-	public int numCardRank10(int rank) {
+	public int numCardRank(int rank) {
 		assert rank <= 10 && rank >= 1 : "invalid card rank";
 		return this.cardsInHand[rank];
 	}
@@ -47,7 +73,7 @@ public class DealerHand {
 	public void addCard(int rank) {
 		assert rank <= 10 && rank >= 1 : "invalid card rank";
 		this.numCards++;
-		this.cardsInHand10[rank]++;
+		this.cardsInHand[rank]++;
 
 		int numAces = 0;
 		if (this.hasAce == true) {
@@ -67,27 +93,24 @@ public class DealerHand {
 	}
 
 	/*
-	 * @requires 1 <= rank <= 13
+	 * @requires 1 <= rank <= 10
 	 * @requires this hand has a card of given rank
 	 */
 	public void removeCard(int rank) {
-		assert rank <= 13 && rank >= 1 : "invalid card rank";
-		assert this.cardsInHand13[rank] > 0 : "no cards of rank " + rank;
+		assert rank <= 10 && rank >= 1 : "invalid card rank";
+		assert this.cardsInHand[rank] > 0 : "no cards of rank " + rank;
 		this.numCards--;
-		this.cardsInHand13[rank]--;
-		rank = Math.min(10, rank);
-		this.cardsInHand10[rank]--;
+		this.cardsInHand[rank]--;
 
 		if (this.hasAce) {
 			this.handValue -= 10;
 			this.hasAce = false;
 		}
 		this.handValue -= rank;
-		if (this.handValue <= 11 && this.cardsInHand10[ACE_RANK] > 0) {
+		if (this.handValue <= 11 && this.cardsInHand[ACE_RANK] > 0) {
 			this.handValue += 10;
 			this.hasAce = true;
 		}
-
 	}
 
 	public boolean getHasAce() {
@@ -100,42 +123,19 @@ public class DealerHand {
 
 	@Override
 	public String toString() {
-		String toReturn = "";
-		for (int i = 1; i < 13; i++) {
-			toReturn += this.cardsInHand13[i] + " ";
+		String toReturn = ""+this.cardsInHand[1];
+		for (int i = 2; i < this.cardsInHand.length; i++) {
+			toReturn += " " + this.cardsInHand[i];
 		}
-		toReturn += this.cardsInHand13[13];
 		return toReturn;
 	}
 
 	/*
-	 * Splits this hand and returns the new hand
-	 * @requires the hand be a pair
-	 */
-	public MinimalHand splitHand() {
-		assert this.numCards == 2 : "splitting hand has " + this.numCards + " cards";
-		MinimalHand newHand = null;
-		// now find the splitting rank (the one with two cards).
-		for (int i = 1; i <= 13; i++) {
-			if (this.cardsInHand13[i] == 2) {
-				newHand = new MinimalHand();
-				newHand.addCard(i);
-				newHand.setSplitHand(i);
-				this.rankSplitOn = i;
-				this.removeCard(i); // take one of this rank out.
-			}
-		}
-		assert newHand != null : "pair not found in splitting hand.";
-		return newHand;
-	}
-
-	/*
 	 * Returns true if this' cards are a subset of the set of cards in otherHand
-	 * assumes all 10s, jacks, queens, kings are equivalent
 	 */
-	public boolean isSubset10(MinimalHand otherHand) {
+	public boolean isSubset(DealerHand otherHand) {
 		for(int i = 1; i <= 10; i += 1) {
-			if(this.cardsInHand10[i] > otherHand.numCardRank10(i)) {return false;}
+			if(this.cardsInHand[i] > otherHand.numCardRank(i)) {return false;}
 		}
 		return true;
 	}

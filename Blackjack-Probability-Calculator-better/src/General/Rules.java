@@ -1,5 +1,7 @@
 package General;
-import MinimalHand;
+
+import PlayerCalculator.PlayerHand;
+import DealerCalculator.DealerHand;
 
 /**
  * This is to store all the rules that are implemented on a given table.
@@ -10,7 +12,7 @@ import MinimalHand;
 
 public class Rules {
 
-	private double payoutLessThanTwentyOne(MinimalHand playerHand, double[] dealerValues, double moneyMade) {
+	private double payoutPlayerLessThanTwentyOne(PlayerHand playerHand, double[] dealerValues, double moneyMade) {
 		for (int i = 0; i < 4; i++) {
 			if (playerHand.getHandValue() > i + 17) {
 				moneyMade += dealerValues[i];
@@ -24,7 +26,7 @@ public class Rules {
 		return moneyMade;
 	}
 
-	private double payoutOnNonblackjackTwentyOne(double[] dealerValues, double moneyMade) {
+	private double payoutOnPlayerNonblackjackTwentyOne(double[] dealerValues, double moneyMade) {
 		for (int i = 0; i < dealerValues.length; i++) {
 			if (i == 4) {
 				moneyMade -= dealerValues[4];
@@ -35,7 +37,7 @@ public class Rules {
 		return moneyMade;
 	}
 
-	private double payoutOnBlackjack(double[] dealerValues, double moneyMade) {
+	private double payoutOnPlayerBlackjack(double[] dealerValues, double moneyMade) {
 		for (int i = 0; i < dealerValues.length; i++) {
 			if (i != 4) { // dealer also has blackjack on i == 4
 				moneyMade += this.blackjackPayout * dealerValues[i];
@@ -44,9 +46,13 @@ public class Rules {
 		return moneyMade;
 	}
 	
-	private boolean hasBlackjack(MinimalHand hand) {
+	private boolean hasBlackjack(PlayerHand hand) {
 		return hand.getHandValue() == 21 && hand.totalNumCards() == 2
 				&& (this.blackjackAfterSplittingAces || hand.getRankSplitOn() != 0);
+	}
+	
+	private boolean hasBlackjack(DealerHand hand) {
+		return hand.getHandValue() == 21 && hand.totalNumCards() == 2;
 	}
 	
   private boolean hitOnSoft17;
@@ -89,8 +95,7 @@ public class Rules {
    *          the hand for which this determines whether or not should stay.
    * @return true if dealer stays according to hand and rules.
    */
-  public boolean dealerStays(MinimalHand dealerHand) {
-
+  public boolean dealerStays(DealerHand dealerHand) {
     if (dealerHand.getHandValue() >= 18) {
       return true;
     } else if (dealerHand.getHandValue() == 17 && this.hitOnSoft17 && dealerHand.getHasAce() ) {
@@ -103,13 +108,13 @@ public class Rules {
   }
 
   /**
-   * Need to look up the rules for this on doubling.
+   * Need to look up the rules for doubling.
    *
    * @param hand
    *          hand that wants to be doubled on
    * @return true if this hand can split
    */
-  public boolean allowedToDouble(MinimalHand hand) {
+  public boolean allowedToDouble(PlayerHand hand) {
     if (hand.totalNumCards() < 2) { return false;}
     if (this.noHitSplitAce && hand.getRankSplitOn() == 0) { return false;}
     if(hand.getHandValue() > 21) {return false;}
@@ -117,7 +122,6 @@ public class Rules {
   }
 
   /**
-   *
    * @param playerHand
    *          hand that is staying
    * @param dealerValues
@@ -125,21 +129,21 @@ public class Rules {
    *          in order: 17,18,19,20, blackjack, non-natural 21, bust. This is an
    *          array that says how probable each is.
    * @requires the probabilities in dealerValues add to ~1.
+   * @requires dealerValues.length == 7
    * @return the average money made by staying on a bet of $1
    */
-  public double moneyMadeOnStaying(MinimalHand playerHand, double[] dealerValues) {
-
+  public double moneyMadeOnStaying(PlayerHand playerHand, double[] dealerValues) {
     assert dealerValues.length == 7 : "dealer values has length " + dealerValues.length + ", not 7";
 
     double moneyMade = 0;
     if (playerHand.getHandValue() > 21) {
       moneyMade = -1;
     } else if (this.hasBlackjack(playerHand)) {
-      moneyMade = payoutOnBlackjack(dealerValues, moneyMade);
+      moneyMade = payoutOnPlayerBlackjack(dealerValues, moneyMade);
     } else if (playerHand.getHandValue() == 21) { // non-blackjack 21
-      moneyMade = payoutOnNonblackjackTwentyOne(dealerValues, moneyMade);
+      moneyMade = payoutOnPlayerNonblackjackTwentyOne(dealerValues, moneyMade);
     } else { // player has hand value < 21
-      moneyMade = payoutLessThanTwentyOne(playerHand, dealerValues, moneyMade);
+      moneyMade = payoutPlayerLessThanTwentyOne(playerHand, dealerValues, moneyMade);
     }
     return moneyMade;
   }
@@ -153,7 +157,7 @@ public class Rules {
    *          the number of times the payer has already split his hand.
    * @return true if the player is allowed to split.
    */
-  public boolean allowedToSplit(MinimalHand hand, int numTimesSplit) {
+  public boolean allowedToSplit(PlayerHand hand, int numTimesSplit) {
     boolean splittable = false;
     if (hand.totalNumCards() == 2) {
       for (int i = 0; i < 13; i++) {
@@ -173,14 +177,14 @@ public class Rules {
     return splittable;
   }
   
-  public boolean playerAllowedToHit(MinimalHand hand) {
+  public boolean playerAllowedToHit(PlayerHand hand) {
 	  if(hand.getRankSplitOn() == 0 && hand.totalNumCards() >= 2 && this.noHitSplitAce) {
 		  return false;
 	  }
 	  return true;
   }
   
-  public boolean playerAllowedToContinue(MinimalHand hand) {
+  public boolean playerAllowedToContinue(PlayerHand hand) {
 	  if(hand.getHandValue() > 21) { return false;}
 	  return true;
   }
@@ -210,19 +214,17 @@ public class Rules {
    * returns an array of 6 zeroes, and one 1.0 in the space this hand has
    * spaces for hand values: {17, 18, 19, 20, non-blackjack 21, blackjack, bust}
    */
-  public double[] dealerResult(MinimalHand dealerHand) {
-	  assert this.dealerStays(dealerHand);
+  public double[] dealerResult(DealerHand dealerHand) {
+	  assert this.dealerStays(dealerHand); // => dealerHandValue >= 17
 	  
 	  int dealerHandValue = dealerHand.getHandValue();
 	  double[] toReturn = new double[7];
-	  if(dealerHandValue < 21) {
-		  toReturn[dealerHandValue - 17] = 1.0;
-	  }else if(dealerHandValue > 21) {
+	  if(dealerHandValue > 21) {
 		  toReturn[6] = 1.0;
 	  }else if(this.hasBlackjack(dealerHand)) {
 		  toReturn[5] = 1.0;
 	  }else {
-		  toReturn[4] = 1.0;
+		  toReturn[dealerHandValue - 17] = 1.0;
 	  }
 	  return toReturn;
   }
