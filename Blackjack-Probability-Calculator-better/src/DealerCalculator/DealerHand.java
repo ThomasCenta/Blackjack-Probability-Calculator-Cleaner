@@ -78,7 +78,7 @@ public class DealerHand {
 		this.cardsInHand[rank]++;
 
 		int numAces = 0;
-		if (this.hasAce == true) {
+		if (this.hasAce) {
 			numAces = 1;
 		}
 		if (rank == ACE_RANK) {

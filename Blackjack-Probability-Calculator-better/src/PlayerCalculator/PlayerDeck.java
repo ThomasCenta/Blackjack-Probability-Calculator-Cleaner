@@ -61,7 +61,7 @@ public class PlayerDeck{
 		assert numDecks >= 0;
 		this.cardsInDeck = new int[14];
 		this.numCards = 52 * numDecks;
-		for (int i = 1; i < this.cardsInDeck.length; i++) {
+		for (int i = 1; i <= 13; i++) {
 			this.cardsInDeck[i] = 4 * numDecks;
 		}
 		this.rand = new Random();
