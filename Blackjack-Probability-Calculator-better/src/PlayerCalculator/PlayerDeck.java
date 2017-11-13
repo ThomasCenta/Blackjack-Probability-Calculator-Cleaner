@@ -8,7 +8,7 @@ import java.util.Random;
  * @author Thomas Centa
  *
  */
-public class Deck{
+public class PlayerDeck{
 
 	/**
 	 * total number of cards in the deck.
@@ -28,7 +28,7 @@ public class Deck{
 	/**
 	 * Default Constructor. Makes an empty deck
 	 */
-	public Deck() {
+	public PlayerDeck() {
 		this.cardsInDeck = new int[14];
 		this.numCards = 0;
 		this.rand = new Random();
@@ -39,7 +39,7 @@ public class Deck{
 	 * does not copy the random number generator.
 	 * @Requires otherDeck != null
 	 */
-	public Deck(Deck otherDeck) {
+	public PlayerDeck(PlayerDeck otherDeck) {
 		assert otherDeck != null;
 		this.cardsInDeck = new int[14];
 		this.numCards = 0;
@@ -57,7 +57,7 @@ public class Deck{
 	 *          The number of decks to create the deck with
 	 * @requires numDecks >= 0
 	 */
-	public Deck(int numDecks) {
+	public PlayerDeck(int numDecks) {
 		assert numDecks >= 0;
 		this.cardsInDeck = new int[14];
 		this.numCards = 52 * numDecks;
@@ -135,7 +135,7 @@ public class Deck{
 		return toReturn;
 	}
 
-	public boolean equals(Deck otherDeck) {
+	public boolean equals(PlayerDeck otherDeck) {
 		if(this.numCards != otherDeck.numCardsInDeck()) { return false;}
 		for(int i = 1; i <=13 ; i += 1) {
 			if(this.cardsInDeck[i] != otherDeck.numCard(i)) { return false;}

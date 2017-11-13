@@ -19,7 +19,7 @@ public class DealerProbabilityCalculatorBruteCheckerUnitTests {
 		}
 		System.out.println("");
 	}
-	
+
 	@Test
 	public void emptyHandOneDeckTest() {
 		boolean hitOnSoft17 = true;
@@ -109,7 +109,6 @@ public class DealerProbabilityCalculatorBruteCheckerUnitTests {
 				blackjackAfterSplittingAces, blackjackPayout, noHitSplitAces, doubleHardValuesAllowed);
 
 		for(int rank = 1; rank <= 10; rank += 1) {
-			System.out.println(rank);
 			DealerHand dealerHand = new DealerHand();
 			dealerHand.addCard(rank);
 			DealerHand initialHand = new DealerHand(dealerHand);
@@ -123,6 +122,100 @@ public class DealerProbabilityCalculatorBruteCheckerUnitTests {
 				assertEquals(expectedResult[i], result[i], 0.000001);
 			}
 		}
+	}
+	
+	@Test
+	public void allOneCardHandsOneDeckNoHitOnSoft17() {
+		boolean hitOnSoft17 = false;
+		int numTimesAllowedSplitting = 0;
+		int numTimesAllowedSplittingAces = 0;
+		boolean blackjackAfterSplittingAces = false;
+		double blackjackPayout = 1.5;
+		boolean noHitSplitAces = false;
+		int[] doubleHardValuesAllowed = null;
 
+		Rules rules = new Rules(hitOnSoft17, numTimesAllowedSplitting, numTimesAllowedSplittingAces,
+				blackjackAfterSplittingAces, blackjackPayout, noHitSplitAces, doubleHardValuesAllowed);
+
+		for(int rank = 1; rank <= 10; rank += 1) {
+			DealerHand dealerHand = new DealerHand();
+			dealerHand.addCard(rank);
+			DealerHand initialHand = new DealerHand(dealerHand);
+			DealerDeck dealerDeck = new DealerDeck(1);
+			dealerDeck.removeCard(rank);
+			DealerProbabilityCalculator calc = new DealerProbabilityCalculator(rules, initialHand);
+
+			double[] expectedResult = BruteForceDealerProbabilityCalculator.dealerResult(rules, dealerDeck, dealerHand, 1.0);
+			double[] result = calc.dealerProbabilities(dealerDeck, dealerHand);
+			for(int i = 0 ; i < expectedResult.length; i += 1) {
+				assertEquals(expectedResult[i], result[i], 0.000001);
+			}
+		}
+	}
+
+	@Test
+	public void allTwoCardHandsOneDeck() {
+		boolean hitOnSoft17 = true;
+		int numTimesAllowedSplitting = 0;
+		int numTimesAllowedSplittingAces = 0;
+		boolean blackjackAfterSplittingAces = false;
+		double blackjackPayout = 1.5;
+		boolean noHitSplitAces = false;
+		int[] doubleHardValuesAllowed = null;
+
+		Rules rules = new Rules(hitOnSoft17, numTimesAllowedSplitting, numTimesAllowedSplittingAces,
+				blackjackAfterSplittingAces, blackjackPayout, noHitSplitAces, doubleHardValuesAllowed);
+
+		for(int rankOne = 1; rankOne <= 10; rankOne += 1) {
+			for(int rankTwo = rankOne; rankTwo <= 10; rankTwo += 1) {
+				DealerHand dealerHand = new DealerHand();
+				dealerHand.addCard(rankOne);
+				dealerHand.addCard(rankTwo);
+				DealerHand initialHand = new DealerHand(dealerHand);
+				DealerDeck dealerDeck = new DealerDeck(1);
+				dealerDeck.removeCard(rankOne);
+				dealerDeck.removeCard(rankTwo);
+				DealerProbabilityCalculator calc = new DealerProbabilityCalculator(rules, initialHand);
+
+				double[] expectedResult = BruteForceDealerProbabilityCalculator.dealerResult(rules, dealerDeck, dealerHand, 1.0);
+				double[] result = calc.dealerProbabilities(dealerDeck, dealerHand);
+				for(int i = 0 ; i < expectedResult.length; i += 1) {
+					assertEquals(expectedResult[i], result[i], 0.000001);
+				}
+			}
+		}
+	}
+	
+	@Test
+	public void allTwoCardHandsOneDeckNoHitOnSoft17() {
+		boolean hitOnSoft17 = false;
+		int numTimesAllowedSplitting = 0;
+		int numTimesAllowedSplittingAces = 0;
+		boolean blackjackAfterSplittingAces = false;
+		double blackjackPayout = 1.5;
+		boolean noHitSplitAces = false;
+		int[] doubleHardValuesAllowed = null;
+
+		Rules rules = new Rules(hitOnSoft17, numTimesAllowedSplitting, numTimesAllowedSplittingAces,
+				blackjackAfterSplittingAces, blackjackPayout, noHitSplitAces, doubleHardValuesAllowed);
+
+		for(int rankOne = 1; rankOne <= 10; rankOne += 1) {
+			for(int rankTwo = rankOne; rankTwo <= 10; rankTwo += 1) {
+				DealerHand dealerHand = new DealerHand();
+				dealerHand.addCard(rankOne);
+				dealerHand.addCard(rankTwo);
+				DealerHand initialHand = new DealerHand(dealerHand);
+				DealerDeck dealerDeck = new DealerDeck(1);
+				dealerDeck.removeCard(rankOne);
+				dealerDeck.removeCard(rankTwo);
+				DealerProbabilityCalculator calc = new DealerProbabilityCalculator(rules, initialHand);
+
+				double[] expectedResult = BruteForceDealerProbabilityCalculator.dealerResult(rules, dealerDeck, dealerHand, 1.0);
+				double[] result = calc.dealerProbabilities(dealerDeck, dealerHand);
+				for(int i = 0 ; i < expectedResult.length; i += 1) {
+					assertEquals(expectedResult[i], result[i], 0.000001);
+				}
+			}
+		}
 	}
 }
