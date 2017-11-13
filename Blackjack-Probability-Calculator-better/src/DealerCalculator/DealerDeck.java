@@ -58,9 +58,10 @@ public class DealerDeck {
 		assert numDecks >= 0;
 		this.cardsInDeck = new int[11];
 		this.numCards = 52 * numDecks;
-		for (int i = 1; i < this.cardsInDeck.length; i++) {
+		for (int i = 1; i < 10; i++) {
 			this.cardsInDeck[i] = 4 * numDecks;
 		}
+		this.cardsInDeck[10] = 16*numDecks;
 		this.rand = new Random();
 	}
 
@@ -150,7 +151,7 @@ public class DealerDeck {
 
 	public String toString() {
 		String toReturn = ""+this.cardsInDeck[1];
-		for (int i = 2; i <= 13; i++) {
+		for (int i = 2; i <= 10; i++) {
 			toReturn += " " + this.cardsInDeck[i];
 		}
 		return toReturn;

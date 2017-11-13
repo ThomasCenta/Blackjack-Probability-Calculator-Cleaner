@@ -201,7 +201,7 @@ public class DealerProbabilityCalculator {
 			if(next.next[1] != null) {
 				updateProbabilitiesOfNextLayer(next, deckWithNodeHand);
 				for(int i = 1; i <= 10; i += 1) {
-					if(deck.drawProbability(i, next.hand) > 0) {
+					if(deckWithNodeHand.drawProbability(i, next.hand) > 0) {
 						toProcess.add(next.next[i]);
 					}
 				}
