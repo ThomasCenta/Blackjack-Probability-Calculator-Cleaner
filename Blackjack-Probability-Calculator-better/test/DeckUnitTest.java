@@ -1,7 +1,7 @@
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import PlayerCalculator.PlayerDeck;
+import PlayerCalculator.ThirteenRankDeck;
 
 public class DeckUnitTest {
 
@@ -9,7 +9,7 @@ public class DeckUnitTest {
 	// Default constructor test
 	@Test
 	public void testDefaultConstructor() {
-		PlayerDeck deck = new PlayerDeck();
+		ThirteenRankDeck deck = new ThirteenRankDeck();
 
 		assertEquals(0, deck.numCardsInDeck());
 		for(int rank = 1; rank <= 13; rank += 1) {
@@ -20,7 +20,7 @@ public class DeckUnitTest {
 	// Single integer constructor tests
 	@Test
 	public void testSingleIntConstructorZero() {
-		PlayerDeck deck = new PlayerDeck(0);
+		ThirteenRankDeck deck = new ThirteenRankDeck(0);
 
 		assertEquals(0, deck.numCardsInDeck());
 		for(int rank = 1; rank <= 13; rank += 1) {
@@ -30,7 +30,7 @@ public class DeckUnitTest {
 
 	@Test
 	public void testSingleIntConstructorOne() {
-		PlayerDeck deck = new PlayerDeck(1);
+		ThirteenRankDeck deck = new ThirteenRankDeck(1);
 
 		assertEquals(52, deck.numCardsInDeck());
 		for(int rank = 1; rank <= 13; rank += 1) {
@@ -40,7 +40,7 @@ public class DeckUnitTest {
 
 	@Test
 	public void testSingleIntConstructorTwo() {
-		PlayerDeck deck = new PlayerDeck(2);
+		ThirteenRankDeck deck = new ThirteenRankDeck(2);
 
 		assertEquals(104, deck.numCardsInDeck());
 		for(int rank = 1; rank <= 13; rank += 1) {
@@ -50,7 +50,7 @@ public class DeckUnitTest {
 
 	@Test
 	public void testSingleIntConstructorTwenty() {
-		PlayerDeck deck = new PlayerDeck(20);
+		ThirteenRankDeck deck = new ThirteenRankDeck(20);
 
 		assertEquals(1040, deck.numCardsInDeck());
 		for(int rank = 1; rank <= 13; rank += 1) {
@@ -61,7 +61,7 @@ public class DeckUnitTest {
 	// Draw probability tests
 	@Test
 	public void testDrawProbabilityNewDeck() {
-		PlayerDeck deck = new PlayerDeck(1);
+		ThirteenRankDeck deck = new ThirteenRankDeck(1);
 		for(int i = 1; i <= 13; i += 1) {
 			assertEquals(1.0/13, deck.drawProbability(i), 0.00001);
 		}
@@ -69,7 +69,7 @@ public class DeckUnitTest {
 
 	@Test
 	public void testDrawProbabilityOneCardRemoved() {
-		PlayerDeck deck = new PlayerDeck(1);
+		ThirteenRankDeck deck = new ThirteenRankDeck(1);
 		for(int removed = 1; removed <= 13; removed += 1) {
 			deck.removeCard(removed);
 			for(int i = 1; i <= 13; i += 1) {
@@ -85,7 +85,7 @@ public class DeckUnitTest {
 
 	@Test
 	public void testDrawProbabilityOneCardInDeck() {
-		PlayerDeck deck = new PlayerDeck(0);
+		ThirteenRankDeck deck = new ThirteenRankDeck(0);
 		for(int added = 1; added <= 13; added += 1) {
 			deck.addCard(added);
 			for(int i = 1; i <= 13; i += 1) {
@@ -101,7 +101,7 @@ public class DeckUnitTest {
 
 	@Test
 	public void testDrawProbabilityNoCardsInDeck() {
-		PlayerDeck deck = new PlayerDeck(0);
+		ThirteenRankDeck deck = new ThirteenRankDeck(0);
 		for(int i = 1; i <= 13; i += 1) {
 			assertEquals(0.0, deck.drawProbability(i), 0.00001);
 		}
@@ -109,7 +109,7 @@ public class DeckUnitTest {
 
 	@Test
 	public void testDrawProbabilityNoCardRankInDeck() {
-		PlayerDeck deck = new PlayerDeck(1);
+		ThirteenRankDeck deck = new ThirteenRankDeck(1);
 		for(int removed = 1; removed <= 13; removed += 1) {
 			for(int i = 0; i < 4; i += 1) {deck.removeCard(removed);}
 			for(int i = 1; i <= 13; i += 1) {
@@ -126,7 +126,7 @@ public class DeckUnitTest {
 	// addCard tests
 	@Test
 	public void testAddCardBasic() {
-		PlayerDeck deck = new PlayerDeck(0);
+		ThirteenRankDeck deck = new ThirteenRankDeck(0);
 		for(int i = 1; i <= 13; i += 1) {
 			deck.addCard(i);
 			assertEquals(i, deck.numCardsInDeck());
@@ -142,7 +142,7 @@ public class DeckUnitTest {
 	// removeCard tests
 	@Test
 	public void testRemoveCardBasic() {
-		PlayerDeck deck = new PlayerDeck(1);
+		ThirteenRankDeck deck = new ThirteenRankDeck(1);
 		for(int i = 1; i <= 13; i += 1) {
 			deck.removeCard(i);
 			assertEquals(52-i, deck.numCardsInDeck());
@@ -158,7 +158,7 @@ public class DeckUnitTest {
 	// removeRandomCard tests
 	@Test
 	public void removeRandomCardTestEmptiesDeck() {
-		PlayerDeck deck = new PlayerDeck(1);
+		ThirteenRankDeck deck = new ThirteenRankDeck(1);
 		while(deck.numCardsInDeck() > 0) {
 			deck.removeRandomCard();
 		}
@@ -166,7 +166,7 @@ public class DeckUnitTest {
 
 	@Test
 	public void removeRandomCardTestRemovesExistingCard() {
-		PlayerDeck deck = new PlayerDeck(0);
+		ThirteenRankDeck deck = new ThirteenRankDeck(0);
 		deck.addCard(1);
 		deck.addCard(7);
 		int removed = deck.removeRandomCard();
@@ -182,7 +182,7 @@ public class DeckUnitTest {
 	// numCard tests (not really necessary)
 	@Test
 	public void numCardTest() {
-		PlayerDeck deck = new PlayerDeck(10);
+		ThirteenRankDeck deck = new ThirteenRankDeck(10);
 		for(int i = 1; i <= 13; i += 1) {
 			assertEquals(40, deck.numCard(i));
 		}

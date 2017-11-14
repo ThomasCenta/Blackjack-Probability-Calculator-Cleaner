@@ -8,7 +8,7 @@ package PlayerCalculator;
  */
 public abstract class PlayerHand {
 
-  protected static final int ACE_RANK = 1;
+  public static final int ACE_RANK = 1;
 
 /**
    * The current value of the hand by blackjack rules (ie. 0 - 21, hopefully not more).

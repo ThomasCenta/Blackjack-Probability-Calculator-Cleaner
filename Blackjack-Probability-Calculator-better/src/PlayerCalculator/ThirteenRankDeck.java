@@ -3,12 +3,11 @@ import java.util.Random;
 
 
 /**
- * The Implementation of the Deck class.
  *
  * @author Thomas Centa
  *
  */
-public class PlayerDeck{
+public class ThirteenRankDeck{
 
 	/**
 	 * total number of cards in the deck.
@@ -19,6 +18,7 @@ public class PlayerDeck{
 	 * index i is number of rank i cards. Aces are rank one, jacks 11, queens 12, kings 13
 	 */
 	private int[] cardsInDeck;
+	
 
 	/**
 	 * Random number generator to draw random cards.
@@ -28,7 +28,7 @@ public class PlayerDeck{
 	/**
 	 * Default Constructor. Makes an empty deck
 	 */
-	public PlayerDeck() {
+	public ThirteenRankDeck() {
 		this.cardsInDeck = new int[14];
 		this.numCards = 0;
 		this.rand = new Random();
@@ -39,13 +39,12 @@ public class PlayerDeck{
 	 * does not copy the random number generator.
 	 * @Requires otherDeck != null
 	 */
-	public PlayerDeck(PlayerDeck otherDeck) {
+	public ThirteenRankDeck(ThirteenRankDeck otherDeck) {
 		assert otherDeck != null;
 		this.cardsInDeck = new int[14];
-		this.numCards = 0;
+		this.numCards = otherDeck.numCardsInDeck();
 		for (int i = 1; i <= 13; i++) {
 			this.cardsInDeck[i] = otherDeck.numCard(i);
-			this.numCards += otherDeck.numCard(i);
 		}
 		this.rand = new Random();
 	}
@@ -57,7 +56,7 @@ public class PlayerDeck{
 	 *          The number of decks to create the deck with
 	 * @requires numDecks >= 0
 	 */
-	public PlayerDeck(int numDecks) {
+	public ThirteenRankDeck(int numDecks) {
 		assert numDecks >= 0;
 		this.cardsInDeck = new int[14];
 		this.numCards = 52 * numDecks;
@@ -122,6 +121,7 @@ public class PlayerDeck{
 		assert rank <= 13 && rank >= 1;
 		return this.cardsInDeck[rank];
 	}
+	
 
 	public int numCardsInDeck() {
 		return this.numCards;
@@ -135,7 +135,7 @@ public class PlayerDeck{
 		return toReturn;
 	}
 
-	public boolean equals(PlayerDeck otherDeck) {
+	public boolean equals(ThirteenRankDeck otherDeck) {
 		if(this.numCards != otherDeck.numCardsInDeck()) { return false;}
 		for(int i = 1; i <=13 ; i += 1) {
 			if(this.cardsInDeck[i] != otherDeck.numCard(i)) { return false;}

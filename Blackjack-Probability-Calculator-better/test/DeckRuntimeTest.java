@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.Queue;
 
-import PlayerCalculator.PlayerDeck;
+import PlayerCalculator.ThirteenRankDeck;
 
 public class DeckRuntimeTest {
 
@@ -16,31 +16,31 @@ public class DeckRuntimeTest {
 		
 		//first 13 will be a simple removal on each rank in regular deck
 		for(int rank = 1; rank <= 13; rank += 1) {
-			tests.add(new TestStruct(new PlayerDeck(1), 1.0/13, rank));
+			tests.add(new TestStruct(new ThirteenRankDeck(1), 1.0/13, rank));
 		}
 		
 		//next test probability of removing from two different rank card deck
-		PlayerDeck deck = new PlayerDeck();
+		ThirteenRankDeck deck = new ThirteenRankDeck();
 		deck.addCard(3);
 		deck.addCard(13);
-		tests.add(new TestStruct(new PlayerDeck(deck), 0.5, 3));
+		tests.add(new TestStruct(new ThirteenRankDeck(deck), 0.5, 3));
 		tests.add(new TestStruct(deck, 0.5, 13));
 	}
 	
 	
 	private static class TestStruct{
-		public PlayerDeck deck;
+		public ThirteenRankDeck deck;
 		public double expectedProbability;
 		public int rankToRemove;
 		
-		public TestStruct(PlayerDeck deck, double expected, int rank) {
+		public TestStruct(ThirteenRankDeck deck, double expected, int rank) {
 			this.deck = deck;
 			this.expectedProbability = expected;
 			this.rankToRemove = rank;
 		}
 	}
 	
-	private static double foundRemovalProbability(PlayerDeck deck, int rankToTest) {
+	private static double foundRemovalProbability(ThirteenRankDeck deck, int rankToTest) {
 		int hits = 0;
 		for(int i = 0; i < NUM_ITERATIONS_PER_TEST; i += 1) {
 			int removed = deck.removeRandomCard();

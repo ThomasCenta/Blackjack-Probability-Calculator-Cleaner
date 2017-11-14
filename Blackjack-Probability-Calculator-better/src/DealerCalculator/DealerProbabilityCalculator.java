@@ -1,10 +1,8 @@
 package DealerCalculator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Stack;
 
 import General.Rules;
-import PlayerCalculator.PlayerDeck;
 
 /*
  * This will be a class creating a tree of hand nodes useful for doing probability calculations
@@ -67,10 +65,14 @@ public class DealerProbabilityCalculator {
 		Queue<Node> toReturn = new LinkedList<Node>();
 		node.next = new Node[11];
 		for(int i = 1; i <= 10; i += 1) {
-			Node next = new Node(new DealerHand(node.hand));
-			next.hand.addCard(i);
-			toReturn.add(next);
-			node.next[i] = next;
+			DealerHand nextHand = new DealerHand(node.hand);
+			nextHand.addCard(i);
+			Node nextNode = this.getNode(nextHand);
+			if(nextNode == null) {
+				nextNode = new Node(nextHand);
+				toReturn.add(nextNode);
+			}
+			node.next[i] = nextNode;
 		}
 		return toReturn;
 	}
@@ -221,6 +223,7 @@ public class DealerProbabilityCalculator {
 	 */
 	public double[] dealerProbabilities(DealerDeck deck, DealerHand dealerHand) {
 		assert deck != null;
+		assert this.startingNode.hand.isSubset(dealerHand);
 
 		if(this.rules.dealerStays(dealerHand)) {
 			return this.rules.dealerResult(dealerHand);

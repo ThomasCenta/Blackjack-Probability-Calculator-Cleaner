@@ -1,7 +1,8 @@
 package General;
 
-import PlayerCalculator.PlayerHand;
 import DealerCalculator.DealerHand;
+import PlayerCalculator.PlayerHand;
+import PlayerCalculator.ThirteenRankHand;
 
 /**
  * This is to store all the rules that are implemented on a given table.
@@ -157,12 +158,12 @@ public class Rules {
    *          the number of times the payer has already split his hand.
    * @return true if the player is allowed to split.
    */
-  public boolean allowedToSplit(PlayerHand hand, int numTimesSplit) {
+  public boolean allowedToSplit(ThirteenRankHand hand, int numTimesSplit) {
     boolean splittable = false;
     if (hand.totalNumCards() == 2) {
-      for (int i = 0; i < 13; i++) {
-        if (hand.numCardRank13(i) == 2) {
-          if (i == 0) {
+      for (int i = 1; i <= 13; i++) {
+        if (hand.numCardRank(i) == 2) {
+          if (i == PlayerHand.ACE_RANK) {
             if (this.numTimesAllowedSplittingAces > numTimesSplit) {
               splittable = true;
             }

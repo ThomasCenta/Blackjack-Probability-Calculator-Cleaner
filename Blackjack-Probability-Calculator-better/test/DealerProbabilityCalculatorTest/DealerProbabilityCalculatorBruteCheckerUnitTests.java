@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import DealerCalculator.DealerDeck;
-import DealerCalculator.DealerHand;
 import DealerCalculator.DealerProbabilityCalculator;
+import DealerCalculator.DealerHand;
 import General.Rules;
 
 public class DealerProbabilityCalculatorBruteCheckerUnitTests {
@@ -209,6 +209,39 @@ public class DealerProbabilityCalculatorBruteCheckerUnitTests {
 				dealerDeck.removeCard(rankOne);
 				dealerDeck.removeCard(rankTwo);
 				DealerProbabilityCalculator calc = new DealerProbabilityCalculator(rules, initialHand);
+
+				double[] expectedResult = BruteForceDealerProbabilityCalculator.dealerResult(rules, dealerDeck, dealerHand, 1.0);
+				double[] result = calc.dealerProbabilities(dealerDeck, dealerHand);
+				for(int i = 0 ; i < expectedResult.length; i += 1) {
+					assertEquals(expectedResult[i], result[i], 0.000001);
+				}
+			}
+		}
+	}
+	
+	@Test
+	public void allTwoCardHandsOneDeckNoHitOnSoft17OneCalculator() {
+		boolean hitOnSoft17 = false;
+		int numTimesAllowedSplitting = 0;
+		int numTimesAllowedSplittingAces = 0;
+		boolean blackjackAfterSplittingAces = false;
+		double blackjackPayout = 1.5;
+		boolean noHitSplitAces = false;
+		int[] doubleHardValuesAllowed = null;
+
+		Rules rules = new Rules(hitOnSoft17, numTimesAllowedSplitting, numTimesAllowedSplittingAces,
+				blackjackAfterSplittingAces, blackjackPayout, noHitSplitAces, doubleHardValuesAllowed);
+
+		DealerProbabilityCalculator calc = new DealerProbabilityCalculator(rules, new DealerHand());
+		for(int rankOne = 1; rankOne <= 10; rankOne += 1) {
+			for(int rankTwo = rankOne; rankTwo <= 10; rankTwo += 1) {
+				DealerHand dealerHand = new DealerHand();
+				dealerHand.addCard(rankOne);
+				dealerHand.addCard(rankTwo);
+				DealerDeck dealerDeck = new DealerDeck(1);
+				dealerDeck.removeCard(rankOne);
+				dealerDeck.removeCard(rankTwo);
+				
 
 				double[] expectedResult = BruteForceDealerProbabilityCalculator.dealerResult(rules, dealerDeck, dealerHand, 1.0);
 				double[] result = calc.dealerProbabilities(dealerDeck, dealerHand);
