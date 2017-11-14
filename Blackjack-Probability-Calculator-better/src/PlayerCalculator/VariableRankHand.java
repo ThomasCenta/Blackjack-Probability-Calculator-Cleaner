@@ -124,6 +124,17 @@ public class VariableRankHand {
 		}
 		return true;
 	}
+	
+	/*
+	 * returns -1 if not a pair, the rank of the pair otherwise
+	 */
+	public int isPair() {
+		if(this.totalNumCards() != 2) { return -1;}
+		for(int i = 1; i <= 13; i += 1) {
+			if(this.cardsInHand13[i] == 2) {return i;}
+		}
+		return -1;
+	}
 
 	@Override
 	public String toString() {

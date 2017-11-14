@@ -1,6 +1,8 @@
 package DealerCalculator;
 import java.util.Random;
 
+import PlayerCalculator.VariableRankDeck;
+
 /*
  * This deck always disregards differences between 10, jack, queen, king.
  */
@@ -43,6 +45,16 @@ public class DealerDeck {
 		for (int i = 1; i <= 10; i++) {
 			this.cardsInDeck[i] = otherDeck.numCard(i);
 			this.numCards += otherDeck.numCard(i);
+		}
+		this.rand = new Random();
+	}
+	
+	public DealerDeck(VariableRankDeck otherDeck) {
+		assert otherDeck != null;
+		this.cardsInDeck = new int[11];
+		this.numCards = otherDeck.numCardsInDeck();
+		for (int i = 1; i <= 10; i++) {
+			this.cardsInDeck[i] = otherDeck.numCard10(i);
 		}
 		this.rand = new Random();
 	}

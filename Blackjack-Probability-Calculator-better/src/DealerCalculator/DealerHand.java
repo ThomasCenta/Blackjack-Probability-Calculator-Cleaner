@@ -1,5 +1,7 @@
 package DealerCalculator;
 
+import PlayerCalculator.VariableRankHand;
+
 public class DealerHand {
 
 	private static final int ACE_RANK = 1;
@@ -54,6 +56,18 @@ public class DealerHand {
 		this.numCards = otherHand.totalNumCards();
 	}
 
+	public DealerHand(VariableRankHand otherHand) {
+		assert otherHand != null;
+
+		this.cardsInHand = new int[11];
+		for (int i = 1; i <= 10; i++) {
+			this.cardsInHand[i] = otherHand.numCardRank10(i);
+		}
+		this.handValue = otherHand.getHandValue();
+		this.hasAce = otherHand.getHasAce();
+		this.numCards = otherHand.totalNumCards();
+	}
+	
 	/*
 	 * @requires 1 <= rank <= 10
 	 */
