@@ -1,8 +1,7 @@
 package General;
 
 import DealerCalculator.DealerHand;
-import PlayerCalculator.PlayerHand;
-import PlayerCalculator.ThirteenRankHand;
+import PlayerCalculator.VariableRankHand;
 
 /**
  * This is to store all the rules that are implemented on a given table.
@@ -13,7 +12,7 @@ import PlayerCalculator.ThirteenRankHand;
 
 public class Rules {
 
-	private double payoutPlayerLessThanTwentyOne(PlayerHand playerHand, double[] dealerValues, double moneyMade) {
+	private double payoutPlayerLessThanTwentyOne(VariableRankHand playerHand, double[] dealerValues, double moneyMade) {
 		for (int i = 0; i < 4; i++) {
 			if (playerHand.getHandValue() > i + 17) {
 				moneyMade += dealerValues[i];
@@ -47,7 +46,7 @@ public class Rules {
 		return moneyMade;
 	}
 	
-	private boolean hasBlackjack(PlayerHand hand) {
+	private boolean hasBlackjack(VariableRankHand hand) {
 		return hand.getHandValue() == 21 && hand.totalNumCards() == 2
 				&& (this.blackjackAfterSplittingAces || hand.getRankSplitOn() != 0);
 	}
@@ -115,7 +114,7 @@ public class Rules {
    *          hand that wants to be doubled on
    * @return true if this hand can split
    */
-  public boolean allowedToDouble(PlayerHand hand) {
+  public boolean allowedToDouble(VariableRankHand hand) {
     if (hand.totalNumCards() < 2) { return false;}
     if (this.noHitSplitAce && hand.getRankSplitOn() == 0) { return false;}
     if(hand.getHandValue() > 21) {return false;}
@@ -133,7 +132,7 @@ public class Rules {
    * @requires dealerValues.length == 7
    * @return the average money made by staying on a bet of $1
    */
-  public double moneyMadeOnStaying(PlayerHand playerHand, double[] dealerValues) {
+  public double moneyMadeOnStaying(VariableRankHand playerHand, double[] dealerValues) {
     assert dealerValues.length == 7 : "dealer values has length " + dealerValues.length + ", not 7";
 
     double moneyMade = 0;
@@ -158,12 +157,12 @@ public class Rules {
    *          the number of times the payer has already split his hand.
    * @return true if the player is allowed to split.
    */
-  public boolean allowedToSplit(ThirteenRankHand hand, int numTimesSplit) {
+  public boolean allowedToSplit(VariableRankHand hand, int numTimesSplit) {
     boolean splittable = false;
     if (hand.totalNumCards() == 2) {
       for (int i = 1; i <= 13; i++) {
-        if (hand.numCardRank(i) == 2) {
-          if (i == PlayerHand.ACE_RANK) {
+        if (hand.numCardRank13(i) == 2) {
+          if (i == VariableRankHand.ACE_RANK) {
             if (this.numTimesAllowedSplittingAces > numTimesSplit) {
               splittable = true;
             }
@@ -178,14 +177,14 @@ public class Rules {
     return splittable;
   }
   
-  public boolean playerAllowedToHit(PlayerHand hand) {
+  public boolean playerAllowedToHit(VariableRankHand hand) {
 	  if(hand.getRankSplitOn() == 0 && hand.totalNumCards() >= 2 && this.noHitSplitAce) {
 		  return false;
 	  }
 	  return true;
   }
   
-  public boolean playerAllowedToContinue(PlayerHand hand) {
+  public boolean playerAllowedToContinue(VariableRankHand hand) {
 	  if(hand.getHandValue() > 21) { return false;}
 	  return true;
   }
