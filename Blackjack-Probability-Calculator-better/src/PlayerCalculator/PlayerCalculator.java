@@ -17,9 +17,10 @@ public class PlayerCalculator {
 	private DealerProbabilityCalculator dealerCalculator;
 	private Rules rules;
 	private VariableRankDeck baseDeck;
+	private VariableRankDeck deckNoDealer;
 	private ArrayList<Queue<Node>> allNodes;
 	private Node startingNode;
-	private DealerHand dealerHand;
+	private VariableRankHand dealerHand;
 
 	private class Node {
 
@@ -143,6 +144,7 @@ public class PlayerCalculator {
 		Queue<Node> toExpand = startingNodes;
 		while(!toExpand.isEmpty()) {
 			Node next = toExpand.poll();
+			if(!this.rules.playerAllowedToContinue(next.hand)) {continue;}
 			for(int i = 1; i <= 10; i += 1) {
 				if(this.baseDeck.drawProbability10(i, next.hand) > 0) {
 					Node newNode = createOrAddBranchingNode(next, i);
@@ -198,6 +200,8 @@ public class PlayerCalculator {
 	 * 		   and equivalent for all other permutations of 12, 4, and 1
 	 * 	 When at a node with hand size >= 2, node.next[10] == next.node[11] == node.next[12] == node.next[13]
 	 * 		this is because its not possible to split past 2 cards so distinguishing between rank 10's is not necessary
+	 * 	 nodes only branch to nodes with hands that are possible to get using the given deck
+	 * 	 node.next[i] == null => node.next[i].hand is not possible to get so is left as null
 	 * 
 	 * Note: adds branches in order of lowest branch:
 	 * 	ie. branches node.next[1].next[2] will be created before node.next[2].next[1]
@@ -211,6 +215,7 @@ public class PlayerCalculator {
 			setAllNodesGreaterThanSizeTwo(sizeTwoNodes);
 		}else {
 			Queue<Node> startingSpot = new LinkedList<Node>();
+			startingSpot.add(this.startingNode);
 			setAllNodesGreaterThanSizeTwo(startingSpot);
 		}
 	}
@@ -220,10 +225,9 @@ public class PlayerCalculator {
 	 * @requires dealerCalculator has been set
 	 */
 	private void setMoneyMadeFromStaying(Node node) {
-		DealerDeck deck = new DealerDeck(this.baseDeck);
-		deck.takeOutHand(this.dealerHand);
+		DealerDeck deck = new DealerDeck(this.deckNoDealer);
 		deck.takeOutHand(new DealerHand(node.hand));
-		double[] dealerResults = this.dealerCalculator.dealerProbabilities(deck, this.dealerHand);
+		double[] dealerResults = this.dealerCalculator.dealerProbabilities(deck, new DealerHand(this.dealerHand));
 		node.setMoneyMadeFromStaying(rules.moneyMadeOnStaying(node.hand, dealerResults));
 	}
 
@@ -240,11 +244,13 @@ public class PlayerCalculator {
 
 	/*
 	 * @requires all applicable nodes in node.next have moneyMadeFromStaying set
+	 * @requires node != null
 	 */
 	private void setMoneyMadeFromDoubling(Node node) {
 		if(!rules.allowedToDouble(node.hand)) {return;}
 		double money = 0.0;
 		for(int i = 1; i <= 13; i += 1) {
+			if(node.next[i] == null) {continue;}
 			money += this.baseDeck.drawProbability13(i, node.hand)*node.next[i].moneyMadeFromStaying;
 		}
 		node.setMoneyMadeFromDoubling(money);
@@ -268,6 +274,7 @@ public class PlayerCalculator {
 		if(!rules.playerAllowedToHit(node.hand)) {return;}
 		double money = 0.0;
 		for(int i = 1; i <= 13; i += 1) {
+			if(node.next[i] == null) {continue;}
 			money += this.baseDeck.drawProbability13(i, node.hand)*node.next[i].mostMoneyMade;
 		}
 		node.setMoneyMadeFromHitting(money);
@@ -297,24 +304,26 @@ public class PlayerCalculator {
 	}
 	
 	private void setAllMoneyMadeFromSplitting() {
-		for(int i = 1; i <= 13; i += 1) {
+		/*for(int i = 1; i <= 13; i += 1) {
 			VariableRankHand hand=  new VariableRankHand();
 			hand.addCard(i);
 			hand.addCard(i);
 			this.setMoneyMadeFromSplitting(this.getNode(hand));
-		}
+		}*/
 	}
 	
 	/*
 	 * Deck should NOT have the cards from either hand taken out of it
 	 */
-	public PlayerCalculator(VariableRankHand hand, VariableRankDeck deck, DealerHand dealerHand, Rules rules) {
+	public PlayerCalculator(VariableRankHand initialPlayerHand, VariableRankDeck deck, VariableRankHand dealerHand, Rules rules) {
 		this.rules = rules;
 		this.dealerHand = dealerHand;
 		this.baseDeck = deck;
-		this.dealerCalculator = new DealerProbabilityCalculator(rules, dealerHand);
+		this.deckNoDealer = new VariableRankDeck(deck);
+		this.deckNoDealer.takeOutHand(dealerHand);
+		this.dealerCalculator = new DealerProbabilityCalculator(rules, new DealerHand(dealerHand));
 		this.allNodes = new ArrayList<Queue<Node>>();
-		initializeAllNodes(hand);
+		initializeAllNodes(initialPlayerHand);
 		setAllMoneyMadeFromStaying();
 		setAllMoneyMadeFromDoubling();
 		setAllMoneyMadeFromHitting(1, this.allNodes.size()-1);

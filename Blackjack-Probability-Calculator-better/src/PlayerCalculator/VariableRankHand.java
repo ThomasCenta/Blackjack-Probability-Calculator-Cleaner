@@ -41,10 +41,10 @@ public class VariableRankHand {
 	}
 	
 	public VariableRankHand(VariableRankHand other) {
-		this.handValue = 0;
-		this.hasAce = false;
-		this.numCards = 0;
-		this.rankSplitOn = -1;
+		this.handValue = other.getHandValue();
+		this.hasAce = other.hasAce;
+		this.numCards = other.totalNumCards();
+		this.rankSplitOn = other.getRankSplitOn();
 		this.cardsInHand10 = new int[11];
 		this.cardsInHand13 = new int[14];
 		for(int i = 1; i <= 13; i += 1) {
@@ -144,5 +144,20 @@ public class VariableRankHand {
 		}
 		return toReturn;
 	}
-
+	
+	public boolean equals(VariableRankHand otherHand) {
+		for(int i = 1; i <= 13; i += 1) {
+			if(this.numCardRank13(i) != otherHand.numCardRank13(i)) {return false;}
+		}
+		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		int sum = 0;
+		for(int i = 1; i <= 13; i += 1) {
+			sum += i*i*this.cardsInHand13[i]*this.cardsInHand13[i];
+		}
+		return sum;
+	}
 }

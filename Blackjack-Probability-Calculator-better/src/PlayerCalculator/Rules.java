@@ -9,7 +9,12 @@ package PlayerCalculator;
 
 public class Rules {
 
-	private double payoutPlayerLessThanTwentyOne(VariableRankHand playerHand, double[] dealerValues, double moneyMade) {
+	public static final int BLACKJACK_INDEX = 5;
+	public static final int NON_BLACKJACK_TWENTY_ONE_INDEX = 4;
+	
+	
+	private double payoutPlayerLessThanTwentyOne(VariableRankHand playerHand, double[] dealerValues) {
+		double moneyMade = 0;
 		for (int i = 0; i < 4; i++) {
 			if (playerHand.getHandValue() > i + 17) {
 				moneyMade += dealerValues[i];
@@ -17,26 +22,28 @@ public class Rules {
 				moneyMade -= dealerValues[i];
 			}
 		}
-		moneyMade -= dealerValues[4];
-		moneyMade -= dealerValues[5];
+		moneyMade -= dealerValues[NON_BLACKJACK_TWENTY_ONE_INDEX];
+		moneyMade -= dealerValues[BLACKJACK_INDEX];
 		moneyMade += dealerValues[6];
 		return moneyMade;
 	}
 
-	private double payoutOnPlayerNonblackjackTwentyOne(double[] dealerValues, double moneyMade) {
+	private double payoutOnPlayerNonblackjackTwentyOne(double[] dealerValues) {
+		double moneyMade = 0;
 		for (int i = 0; i < dealerValues.length; i++) {
-			if (i == 4) {
-				moneyMade -= dealerValues[4];
-			} else if (i != 5) { // this is a push
+			if (i == BLACKJACK_INDEX) {
+				moneyMade -= dealerValues[i];
+			} else if (i != NON_BLACKJACK_TWENTY_ONE_INDEX) { // this is a push
 				moneyMade += dealerValues[i];
 			}
 		}
 		return moneyMade;
 	}
 
-	private double payoutOnPlayerBlackjack(double[] dealerValues, double moneyMade) {
+	private double payoutOnPlayerBlackjack(double[] dealerValues) {
+		double moneyMade = 0;
 		for (int i = 0; i < dealerValues.length; i++) {
-			if (i != 4) { // dealer also has blackjack on i == 4
+			if (i != BLACKJACK_INDEX) { 
 				moneyMade += this.blackjackPayout * dealerValues[i];
 			}
 		}
@@ -136,11 +143,11 @@ public class Rules {
     if (playerHand.getHandValue() > 21) {
       moneyMade = -1;
     } else if (this.hasBlackjack(playerHand)) {
-      moneyMade = payoutOnPlayerBlackjack(dealerValues, moneyMade);
+      moneyMade = payoutOnPlayerBlackjack(dealerValues);
     } else if (playerHand.getHandValue() == 21) { // non-blackjack 21
-      moneyMade = payoutOnPlayerNonblackjackTwentyOne(dealerValues, moneyMade);
+      moneyMade = payoutOnPlayerNonblackjackTwentyOne(dealerValues);
     } else { // player has hand value < 21
-      moneyMade = payoutPlayerLessThanTwentyOne(playerHand, dealerValues, moneyMade);
+      moneyMade = payoutPlayerLessThanTwentyOne(playerHand, dealerValues);
     }
     return moneyMade;
   }
@@ -224,5 +231,9 @@ public class Rules {
 		  toReturn[dealerHandValue - 17] = 1.0;
 	  }
 	  return toReturn;
+  }
+  
+  public double moneyMadeOnBusting() {
+	  return -1;
   }
 }

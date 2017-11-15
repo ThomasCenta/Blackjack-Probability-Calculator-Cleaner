@@ -225,4 +225,18 @@ public class VariableRankDeck {
 		}
 		return true;
 	}
+	
+	/*
+	 * @requires hand != null
+	 * @requires this has the cards in hand
+	 */
+	public void takeOutHand(VariableRankHand hand) {
+		assert hand != null;
+		for(int i = 1; i <= 13; i += 1) {
+			assert this.cardsInDeck13[i] >= hand.numCardRank13(i);
+			this.cardsInDeck13[i] -= hand.numCardRank13(i);
+			this.cardsInDeck10[Math.min(10, i)] -= hand.numCardRank13(i);
+		}
+		this.numCards -= hand.totalNumCards();
+	}
 }
