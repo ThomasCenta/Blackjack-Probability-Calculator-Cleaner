@@ -1,7 +1,4 @@
-package General;
-
-import DealerCalculator.DealerHand;
-import PlayerCalculator.VariableRankHand;
+package PlayerCalculator;
 
 /**
  * This is to store all the rules that are implemented on a given table.

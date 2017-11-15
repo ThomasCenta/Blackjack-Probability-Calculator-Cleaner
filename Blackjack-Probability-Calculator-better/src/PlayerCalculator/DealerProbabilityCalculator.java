@@ -1,8 +1,6 @@
-package DealerCalculator;
+package PlayerCalculator;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import General.Rules;
 
 /*
  * This will be a class creating a tree of hand nodes useful for doing probability calculations

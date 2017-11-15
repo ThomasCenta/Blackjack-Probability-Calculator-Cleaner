@@ -37,6 +37,7 @@ public class VariableRankDeck {
 	public VariableRankDeck(VariableRankDeck otherDeck) {
 		assert otherDeck != null;
 		this.cardsInDeck10 = new int[11];
+		this.cardsInDeck13 = new int[14];
 		this.numCards = otherDeck.numCardsInDeck();
 		for (int i = 1; i <= 13; i++) {
 			this.cardsInDeck13[i] = otherDeck.numCard13(i);
@@ -139,7 +140,7 @@ public class VariableRankDeck {
 		assert rank >= 1 && rank <= 13;
 		assert this.cardsInDeck13[rank] > 0 : "No card in the deck of rank " + rank;
 		this.cardsInDeck13[rank]--;
-		this.cardsInDeck13[Math.min(10, rank)]--;
+		this.cardsInDeck10[Math.min(10, rank)]--;
 		this.numCards--;
 	}
 
@@ -155,6 +156,7 @@ public class VariableRankDeck {
 			sum += this.cardsInDeck13[currentIndex];
 			if (sum >= nextCard) {
 				this.cardsInDeck13[currentIndex]--;
+				this.cardsInDeck10[Math.min(10, currentIndex)]--;
 				this.numCards--;
 				return currentIndex;
 			}

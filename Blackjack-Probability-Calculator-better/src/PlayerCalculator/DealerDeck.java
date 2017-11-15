@@ -1,7 +1,5 @@
-package DealerCalculator;
+package PlayerCalculator;
 import java.util.Random;
-
-import PlayerCalculator.VariableRankDeck;
 
 /*
  * This deck always disregards differences between 10, jack, queen, king.

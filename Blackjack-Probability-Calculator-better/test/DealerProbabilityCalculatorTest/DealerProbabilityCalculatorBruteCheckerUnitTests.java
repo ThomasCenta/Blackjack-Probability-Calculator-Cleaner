@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import DealerCalculator.DealerDeck;
-import DealerCalculator.DealerProbabilityCalculator;
-import DealerCalculator.DealerHand;
-import General.Rules;
+import PlayerCalculator.DealerDeck;
+import PlayerCalculator.DealerHand;
+import PlayerCalculator.DealerProbabilityCalculator;
+import PlayerCalculator.Rules;
 
 public class DealerProbabilityCalculatorBruteCheckerUnitTests {
 

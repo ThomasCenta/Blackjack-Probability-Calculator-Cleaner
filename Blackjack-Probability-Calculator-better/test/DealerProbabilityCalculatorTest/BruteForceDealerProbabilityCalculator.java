@@ -1,7 +1,8 @@
 package DealerProbabilityCalculatorTest;
 
-import DealerCalculator.*;
-import General.Rules;
+import PlayerCalculator.DealerDeck;
+import PlayerCalculator.DealerHand;
+import PlayerCalculator.Rules;
 
 public class BruteForceDealerProbabilityCalculator {
 

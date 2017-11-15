@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import DealerCalculator.*;
-import General.Rules;
 
 public class PlayerCalculator {
 

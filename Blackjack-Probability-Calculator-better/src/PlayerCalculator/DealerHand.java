@@ -1,6 +1,4 @@
-package DealerCalculator;
-
-import PlayerCalculator.VariableRankHand;
+package PlayerCalculator;
 
 public class DealerHand {
 

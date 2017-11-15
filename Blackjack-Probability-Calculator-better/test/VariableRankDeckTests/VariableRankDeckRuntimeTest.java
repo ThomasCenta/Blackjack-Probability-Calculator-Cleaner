@@ -1,9 +1,10 @@
+package VariableRankDeckTests;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import PlayerCalculator.ThirteenRankDeck;
+import PlayerCalculator.VariableRankDeck;
 
-public class DeckRuntimeTest {
+public class VariableRankDeckRuntimeTest {
 
 	private static final int NUM_ITERATIONS_PER_TEST = 10000000;
 	private static final double ACCEPTABLE_DEVIATION = 0.001;
@@ -16,31 +17,31 @@ public class DeckRuntimeTest {
 		
 		//first 13 will be a simple removal on each rank in regular deck
 		for(int rank = 1; rank <= 13; rank += 1) {
-			tests.add(new TestStruct(new ThirteenRankDeck(1), 1.0/13, rank));
+			tests.add(new TestStruct(new VariableRankDeck(1), 1.0/13, rank));
 		}
 		
 		//next test probability of removing from two different rank card deck
-		ThirteenRankDeck deck = new ThirteenRankDeck();
+		VariableRankDeck deck = new VariableRankDeck();
 		deck.addCard(3);
 		deck.addCard(13);
-		tests.add(new TestStruct(new ThirteenRankDeck(deck), 0.5, 3));
+		tests.add(new TestStruct(new VariableRankDeck(deck), 0.5, 3));
 		tests.add(new TestStruct(deck, 0.5, 13));
 	}
 	
 	
 	private static class TestStruct{
-		public ThirteenRankDeck deck;
+		public VariableRankDeck deck;
 		public double expectedProbability;
 		public int rankToRemove;
 		
-		public TestStruct(ThirteenRankDeck deck, double expected, int rank) {
+		public TestStruct(VariableRankDeck deck, double expected, int rank) {
 			this.deck = deck;
 			this.expectedProbability = expected;
 			this.rankToRemove = rank;
 		}
 	}
 	
-	private static double foundRemovalProbability(ThirteenRankDeck deck, int rankToTest) {
+	private static double foundRemovalProbability(VariableRankDeck deck, int rankToTest) {
 		int hits = 0;
 		for(int i = 0; i < NUM_ITERATIONS_PER_TEST; i += 1) {
 			int removed = deck.removeRandomCard();
