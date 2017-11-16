@@ -1,24 +1,25 @@
 package PlayerCalculatorTests;
 
+import PlayerCalculator.PlayerCalculator;
 import PlayerCalculator.Rules;
 import PlayerCalculator.VariableRankDeck;
 import PlayerCalculator.VariableRankHand;
 
-public class AlternatePlayerCalculatorSimulationTest {
+public class PlayerCalculatorSimulationTest {
 
 	private static VariableRankHand dealerHand;
 	private static VariableRankHand playerHand;
 	private static VariableRankDeck baseDeck;
-	private static AlternatePlayerCalculator calc;
+	private static PlayerCalculator calc;
 	private static Rules rules;
-	private static final int NUM_TESTS = 100000;
+	private static final int NUM_TESTS = 1000000;
 	
 	private static void setup() {
 		boolean hitOnSoft17 = false;
 		int numTimesAllowedSplitting = 0;
 		int numTimesAllowedSplittingAces = 0;
 		boolean blackjackAfterSplittingAces = false;
-		double blackjackPayout = 1.5;
+		double blackjackPayout = 1.2;
 		boolean noHitSplitAces = false;
 		int[] doubleHardValuesAllowed = null;
 		
@@ -27,7 +28,7 @@ public class AlternatePlayerCalculatorSimulationTest {
 		
 		//					nothing, ace,2,3,4,5,6,7,8,9,10,jack,queen,king
 		int[] playerCards = 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-		int[] dealerHandCards = 	{0,0,0,0,0,0,0,0,0,0,2,0,0,0};
+		int[] dealerHandCards = 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		int[] deckCards = 			{0,4,4,4,4,4,4,4,4,4,4,4,4,4};
 		
 		playerHand = new VariableRankHand();
@@ -73,12 +74,12 @@ public class AlternatePlayerCalculatorSimulationTest {
 	public static double runSimulationCalculateDealer(VariableRankHand playerCurrentHand, VariableRankDeck deck) {
 		double[] results = calc.results(playerCurrentHand);
 		int bestMove = largestIndex(results);
-		if(bestMove == AlternatePlayerCalculator.STAYING_INDEX) {
+		if(bestMove == PlayerCalculator.STAYING_INDEX) {
 			return results[0];
-		}else if(bestMove == AlternatePlayerCalculator.DOUBLING_INDEX) {
+		}else if(bestMove == PlayerCalculator.DOUBLING_INDEX) {
 			playerCurrentHand.addCard(deck.removeRandomCard());
 			return 2*calc.results(playerCurrentHand)[0];
-		}else if(bestMove == AlternatePlayerCalculator.HITTING_INDEX) {
+		}else if(bestMove == PlayerCalculator.HITTING_INDEX) {
 			playerCurrentHand.addCard(deck.removeRandomCard());
 			return runSimulationCalculateDealer(playerCurrentHand, deck);
 		}else {
@@ -90,7 +91,7 @@ public class AlternatePlayerCalculatorSimulationTest {
 	
 	public static void main(String[] args) {
 		setup();
-		calc = new AlternatePlayerCalculator(dealerHand, baseDeck, rules);
+		calc = new PlayerCalculator(dealerHand, baseDeck, rules);
 		double[] predictedResults = calc.results(playerHand);
 		double predictedMoneyMade = predictedResults[largestIndex(predictedResults)];
 		

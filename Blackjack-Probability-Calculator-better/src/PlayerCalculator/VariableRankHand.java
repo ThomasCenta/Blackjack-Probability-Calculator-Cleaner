@@ -159,7 +159,7 @@ public class VariableRankHand {
 	public int hashCode() {
 		int sum = 0;
 		for(int i = 1; i <= 13; i += 1) {
-			sum += i*i*this.cardsInHand13[i]*this.cardsInHand13[i];
+			sum += i*this.cardsInHand13[i];
 		}
 		return sum;
 	}
