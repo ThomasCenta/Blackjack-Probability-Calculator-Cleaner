@@ -1,42 +1,58 @@
 package PlayerCalculatorTests;
 
+import PlayerCalculator.Rules;
 import PlayerCalculator.VariableRankDeck;
 import PlayerCalculator.VariableRankHand;
 
 public class AlternatePlayerCalculatorSimulationTest {
 
+	private static VariableRankHand dealerHand;
+	private static VariableRankHand playerHand;
+	private static VariableRankDeck baseDeck;
+	private static AlternatePlayerCalculator calc;
+	private static Rules rules;
+	private static final int NUM_TESTS = 100000;
+	
 	private static void setup() {
+		boolean hitOnSoft17 = false;
+		int numTimesAllowedSplitting = 0;
+		int numTimesAllowedSplittingAces = 0;
+		boolean blackjackAfterSplittingAces = false;
+		double blackjackPayout = 1.5;
+		boolean noHitSplitAces = false;
+		int[] doubleHardValuesAllowed = null;
+		
+		rules = new Rules(hitOnSoft17, numTimesAllowedSplitting, numTimesAllowedSplittingAces,
+				blackjackAfterSplittingAces, blackjackPayout, noHitSplitAces, doubleHardValuesAllowed);
+		
 		//					nothing, ace,2,3,4,5,6,7,8,9,10,jack,queen,king
 		int[] playerCards = 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 		int[] dealerHandCards = 	{0,0,0,0,0,0,0,0,0,0,2,0,0,0};
-		int[] deckCards = 			{0,1,0,0,0,0,0,0,0,0,3,0,0,0};
+		int[] deckCards = 			{0,4,4,4,4,4,4,4,4,4,4,4,4,4};
 		
-		VariableRankHand playerHand = new VariableRankHand();
+		playerHand = new VariableRankHand();
 		for(int i = 1; i <= 13; i += 1) {
 			for(int j = 0; j < playerCards[i]; j += 1) {
 				playerHand.addCard(i);
 			}
 		}
 
-		VariableRankHand dealerHand = new VariableRankHand();
+		dealerHand = new VariableRankHand();
 		for(int i = 1; i <= 13; i += 1) {
 			for(int j = 0; j < dealerHandCards[i]; j += 1) {
 				dealerHand.addCard(i);
 			}
 		}
 
-		VariableRankDeck deck = new VariableRankDeck();
+		baseDeck = new VariableRankDeck();
 		for(int i = 1; i <= 13; i += 1) {
 			for(int j = 0; j < deckCards[i]; j += 1) {
-				deck.addCard(i);
+				baseDeck.addCard(i);
 			}
 		}
 	}
+
 	
-	private static VariableRankHand dealerhand;
-	private static VariableRankHand playerHand;
-	private static VariableRankDeck deck;
-	private static AlternatePlayerCalculator calc;
 	
 	private static int largestIndex(double[] arr) {
 		int largestIndex = 0;
@@ -54,14 +70,17 @@ public class AlternatePlayerCalculatorSimulationTest {
 	 * simulates the player, but not the dealer.
 	 * alters hands and deck
 	 */
-	public static double runSimulationCalculateDealer(VariableRankHand hand, VariableRankDeck deck) {
-		int bestMove = largestIndex(calc.results(hand));
+	public static double runSimulationCalculateDealer(VariableRankHand playerCurrentHand, VariableRankDeck deck) {
+		double[] results = calc.results(playerCurrentHand);
+		int bestMove = largestIndex(results);
 		if(bestMove == AlternatePlayerCalculator.STAYING_INDEX) {
-			
+			return results[0];
 		}else if(bestMove == AlternatePlayerCalculator.DOUBLING_INDEX) {
-			
+			playerCurrentHand.addCard(deck.removeRandomCard());
+			return 2*calc.results(playerCurrentHand)[0];
 		}else if(bestMove == AlternatePlayerCalculator.HITTING_INDEX) {
-			
+			playerCurrentHand.addCard(deck.removeRandomCard());
+			return runSimulationCalculateDealer(playerCurrentHand, deck);
 		}else {
 			assert false;
 		}
@@ -70,6 +89,21 @@ public class AlternatePlayerCalculatorSimulationTest {
 	
 	
 	public static void main(String[] args) {
-		calc = 
+		setup();
+		calc = new AlternatePlayerCalculator(dealerHand, baseDeck, rules);
+		double[] predictedResults = calc.results(playerHand);
+		double predictedMoneyMade = predictedResults[largestIndex(predictedResults)];
+		
+		VariableRankDeck noHandDeck = new VariableRankDeck(baseDeck);
+		noHandDeck.takeOutHand(dealerHand);
+		noHandDeck.takeOutHand(playerHand);
+		
+		double totalMoney = 0;
+		for(int i = 0; i < NUM_TESTS; i += 1) {
+			totalMoney += runSimulationCalculateDealer(new VariableRankHand(playerHand), new VariableRankDeck(noHandDeck));
+		}
+		System.out.println("Average simulation money = "+totalMoney/NUM_TESTS);
+		System.out.println("predicted money = "+predictedMoneyMade);
+		System.out.println("difference = "+(totalMoney/NUM_TESTS-predictedMoneyMade));
 	}
 }

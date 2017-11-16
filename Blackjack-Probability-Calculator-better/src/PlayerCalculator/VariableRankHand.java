@@ -145,9 +145,12 @@ public class VariableRankHand {
 		return toReturn;
 	}
 	
-	public boolean equals(VariableRankHand otherHand) {
+	@Override
+	public boolean equals(Object o) {
+		if(!(o instanceof VariableRankHand)) { return false;}
+		VariableRankHand hand = (VariableRankHand) o;
 		for(int i = 1; i <= 13; i += 1) {
-			if(this.numCardRank13(i) != otherHand.numCardRank13(i)) {return false;}
+			if(this.numCardRank13(i) != hand.numCardRank13(i)) {return false;}
 		}
 		return true;
 	}

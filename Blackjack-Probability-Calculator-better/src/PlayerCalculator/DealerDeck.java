@@ -190,6 +190,19 @@ public class DealerDeck {
 	
 	/*
 	 * @requires hand != null
+	 * @requires this has the cards in hand
+	 */
+	public void takeOutHand(VariableRankHand hand) {
+		assert hand != null;
+		for(int i = 1; i <= 10; i += 1) {
+			assert this.cardsInDeck[i] >= hand.numCardRank10(i);
+			this.cardsInDeck[i] -= hand.numCardRank10(i);
+		}
+		this.numCards -= hand.totalNumCards();
+	}
+	
+	/*
+	 * @requires hand != null
 	 */
 	public void addHand(DealerHand hand) {
 		assert hand != null;
