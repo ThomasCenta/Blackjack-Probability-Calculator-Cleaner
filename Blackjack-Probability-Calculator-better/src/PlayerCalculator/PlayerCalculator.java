@@ -55,6 +55,8 @@ public class PlayerCalculator {
 		double[] dealerResults = this.dealerCalculator.dealerProbabilities(dealerDeck, this.dealerHand);
 		return rules.moneyMadeOnStaying(playerHand,dealerResults);
 	}
+	
+	private double getMoneyMadeOnSplitting
 
 	private void addInfo(VariableRankHand hand, MoneyInfo info) {
 		this.allFullyCalculatedHands.put(new VariableRankHand(hand), info);
